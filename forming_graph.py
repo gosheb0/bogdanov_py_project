@@ -6,6 +6,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
 
 
+
 class Vacancy:
     currency_to_rub = {
         "AZN": 35.68, "BYR": 23.91,
