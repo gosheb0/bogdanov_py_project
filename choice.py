@@ -1,7 +1,7 @@
 import os
 
 print(" Выберите, что запустить: ")
-print("1 - Формирование exel отчета ")
+print("1 - Формирование отчета в виде exel файла ")
 print("2 - Формирование графиков ")
 result = input()
 if int(result) == 1:
