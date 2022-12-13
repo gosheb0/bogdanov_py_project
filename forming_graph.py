@@ -6,8 +6,18 @@ from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Border, Side
 
 
-
 class Vacancy:
+    """ Класс для представления вакансий
+
+    Attributes:
+        self.name (str): Название вакансии
+        self.salary_from (str or int or float): Нижняя граница вилки оклада
+        self.salary_to (str or int or float): Верхняя граница вилки оклада
+        self.salary_currency (str): Валюта оклада
+        self.salary_average : Средний оклад
+        self.area_name (str):  Город публикиции вакансии
+        self.year (int):  Год публикации вакансии
+    """
     currency_to_rub = {
         "AZN": 35.68, "BYR": 23.91,
         "EUR": 59.90, "GEL": 21.74,
@@ -27,7 +37,11 @@ class Vacancy:
 
 
 class DataSet:
+    """ Класс для формирования данных"""
     def __init__(self, file_name, vacancy_name):
+        """
+            Инициализирует объекты file, vacancy
+        """
         self.file_name = file_name
         self.vacancy_name = vacancy_name
 
@@ -40,12 +54,18 @@ class DataSet:
 
     @staticmethod
     def average(value):
+        """
+        Формирует среднее значение
+        """
         new_dict = {}
         for k, v in value.items():
             new_dict[k] = int(sum(v) / len(v))
         return new_dict
 
     def csv_reader(self):
+        """
+                Считывает файл, форммирует словарь
+        """
         with open(self.file_name, "r", encoding='utf-8-sig') as csv_file:
             reader = csv.reader(csv_file)
             header = next(reader)
@@ -114,6 +134,7 @@ class DataSet:
 
 
 class InputConnect:
+    """ Класс для ввода данных"""
     def __init__(self):
         self.file_name = input('Введите название файла: ')
         self.vacancy_name = input('Введите название профессии: ')
@@ -144,6 +165,7 @@ def widths_column(data, l2):
 
 
 class Report:
+    """ Класс для формирования отчета """
     def __init__(self, vacancy_name, stats_1, stats_2, stats_3, stats_4, stats_5, stats_6):
         self.wb = Workbook()
         self.vacancy_name = vacancy_name
@@ -188,6 +210,7 @@ class Report:
         self.thin(data, l1, l2)
 
     def thin(self, data, l1, l2):
+        """ Тонкость шрифта """
         thin = Side(border_style='thin', color='00000000')
         for row in range(len(data)):
             for v in 'ABDE':
@@ -197,6 +220,7 @@ class Report:
                 l1[v + str(row + 1)].border = Border(left=thin, bottom=thin, right=thin, top=thin)
 
     def font_bold(self, l1, l2):
+        """ Жирность шрифта """
         font_bold = Font(bold=True)
         for v in 'ABCDE':
             l1[v + '1'].font = font_bold
@@ -205,6 +229,7 @@ class Report:
             l2['E' + str(i + 2)].number_format = '0.00%'
 
     def generating_graph(self):
+        """Создает график"""
         fig, ((ax_1, ax_2), (ax_3, ax_4)) = plt.subplots(nrows=2, ncols=2)
 
         bar_1 = ax_1.bar(np.array(list(self.stats_1.keys())) - 0.4, self.stats_1.values(), width=0.4)

@@ -5,6 +5,17 @@ from openpyxl import Workbook
 
 
 class Vacancy:
+    """ Класс для представления вакансий
+
+        Attributes:
+            self.name (str): Название вакансии
+            self.salary_from (str or int or float): Нижняя граница вилки оклада
+            self.salary_to (str or int or float): Верхняя граница вилки оклада
+            self.salary_currency (str): Валюта оклада
+            self.salary_average : Средний оклад
+            self.area_name (str):  Город публикиции вакансии
+            self.year (int):  Год публикации вакансии
+        """
     currency_to_rub = {
         "AZN": 35.68, "BYR": 23.91,
         "EUR": 59.90, "GEL": 21.74,
@@ -37,6 +48,9 @@ class DataSet:
 
     @staticmethod
     def average(value):
+        """
+                Формирует среднее значение
+                """
         new_dict = {}
         for k, v in value.items():
             new_dict[k] = int(sum(v) / len(v))
@@ -44,6 +58,9 @@ class DataSet:
 
     @property
     def csv_reader(self):
+        """
+                       Считывает файл, форммирует словарь
+               """
         with open(self.file_name, "r", encoding='utf-8-sig') as csv_file:
             reader = csv.reader(csv_file)
             header = next(reader)
@@ -110,6 +127,7 @@ class DataSet:
 
 
 class InputConnect:
+    """ Класс для ввода данных"""
     def __init__(self) -> object:
         self.file_name = input('Введите название файла: ')
         self.vacancy_name = input('Введите название профессии: ')
@@ -141,6 +159,7 @@ def widths_of_columns(data, ws2):
 
 
 class Report:
+    """ Класс для формирования отчета """
     def __init__(self, vacancy_name, stats1, stats2, stats3, stats4, stats5, stats6):
         self.wb = Workbook()
         self.vacancy_name = vacancy_name
@@ -152,6 +171,7 @@ class Report:
         self.stats_6 = stats6
 
     def to_excel(self):
+        """ Формирования excel документа """
         l1 = self.wb.active
         l1.title = 'Статистика по годам'
         l1.append(['Год', 'Средняя зарплата', 'Средняя зарплата - ' + self.vacancy_name,
@@ -198,6 +218,7 @@ class Report:
                 l1[v + str(row + 1)].border = Border(left=thin, bottom=thin, right=thin, top=thin)
 
     def font_of_bold(self, l1, l2):
+        """ Жирность шрифта """
         font_bold = Font(bold=True)
         for v in 'ABCDE':
             l1[v + '1'].font = font_bold
